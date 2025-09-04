@@ -122,6 +122,3 @@ remote-twin-baker/
 
 ## Contributing
 Submit pull requests or open issues for bugs, features, or improvements. Follow the coding style in existing files.
-
-## License
-MIT License
