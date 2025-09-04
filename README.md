@@ -1,25 +1,45 @@
-# remote-twin-baker
-Pythonic decorator to simplify heavy/traffic-blocked task execution with remote twin runtime by automating file synchronization, environment validation, and result retrieval. 
-Using a decorator-based approach, it allows developers to write local Python functions and execute them on a remote server without modifying core business logic. The system ensures that only necessary files are transferred, environments are consistent, and results (both Python objects and files) are seamlessly returned to the client.
+# Remote Twin Baker
 
-## Features
-- **Decorator-Based Workflow**: Add a `@remote_execution_decorator` to any Python function to enable remote execution with automatic file synchronization.
-- **Selective File Transfer**: Only new or modified files are transferred, using MD5 hash comparison to avoid redundant uploads.
-- **Environment Consistency**: Compares client and server environments, generating a report if discrepancies are found (manual repair required).
-- **Result Retrieval**: Automatically syncs back Python objects and generated files, with a 10-second polling mechanism for new files.
-- **Flexible Deployment**: Runs a FastAPI server on port 7777, with Nginx handling HTTPS in production.
-- **Broad Applicability**: Suitable for data science, AI, edge computing, and collaborative development scenarios.
+**Remote Twin Baker** is a Python framework for seamless remote task execution. By adding a simple decorator to your Python functions, it automates file synchronization, environment validation, and result retrieval between a local client and a remote server. Designed for data science, AI, edge computing, and collaborative development, it minimizes manual overhead while ensuring consistency across environments.
+
+## Key Features
+- **Decorator-Based Execution**: Use `@remote_execution_decorator` to run local Python functions on a remote server.
+- **Efficient File Sync**: Transfers only new or modified files using MD5 hash checks.
+- **Environment Validation**: Compares client and server environments, reporting mismatches for manual correction.
+- **Result Retrieval**: Returns Python objects and new files, with 10-second polling for asynchronous file sync.
+- **Scalable Deployment**: Runs a FastAPI server on port 7777, with Nginx for HTTPS in production.
+- **Versatile Use Cases**: Supports large-scale data processing, AI model training, IoT, and team collaboration.
+
+## Project Structure
+```
+remote-twin-baker/
+├── LICENSE
+├── README.md
+├── app/
+│   └── server.py              # FastAPI server for remote execution
+├── client/
+│   └── remote_execution.py    # Client-side decorator logic
+├── config.local.yaml          # Local testing configuration
+├── config.yaml                # Production configuration
+├── nginx/
+│   └── remote_twin_baker.conf # Nginx configuration for HTTPS
+├── requirements.txt           # Dependencies for client and server
+├── test/
+│   └── test_server.py         # Test script for local validation
+└── utils/
+    └── merge_env_requirements.py # Utility for environment management
+```
 
 ## Installation
 
 1. **Clone the Repository**:
    ```bash
-   git clone git@github.com:YankeeMarco/remote-twin-baker.git  or git clone https://github.com/YankeeMarco/remote-twin-baker.git
-   cd remote_twin_baker
+   git clone https://github.com/your-username/remote-twin-baker.git
+   cd remote-twin-baker
    ```
 
-2. **Set Up Conda/Virtual Environment**:
-   Use Python 3.12 and install dependencies, you should merge the requirements file with your own:
+2. **Set Up Environment**:
+   Create a Python 3.12 Conda/virtual environment:
    ```bash
    conda create -n remote_twin_baker python=3.12
    conda activate remote_twin_baker
@@ -27,23 +47,30 @@ Using a decorator-based approach, it allows developers to write local Python fun
    ```
 
 3. **Configure the Server**:
-   Update `rem_shop.yaml` with the appropriate server URL:
-   - For local testing: `url: http://localhost:7777`
-   - For production: `url: https://your-server.com` (requires Nginx setup).
+   - For local testing, use `config.local.yaml` (sets `url: http://localhost:7777`).
+   - For production, update `config.yaml` with your server URL (e.g., `https://xxx.com/twin_baker`).
+
+4. **Set Up Nginx (Production)**:
+   - Copy `nginx/remote_twin_baker.conf` to `/etc/nginx/conf.d/`.
+   - Update SSL certificate paths in the config.
+   - Test and reload Nginx:
+     ```bash
+     nginx -t
+     systemctl reload nginx
+     ```
 
 ## Usage
 
-1. **Run the Server**:
-   Start the FastAPI server locally:
+1. **Start the Server**:
    ```bash
-   python server.py
+   python app/server.py
    ```
-   The server runs on `http://localhost:7777`. In production, configure Nginx to map HTTPS to this port.
+   The server runs on `http://localhost:7777`. In production, Nginx proxies `https://xxx.com/twin_baker` to this port.
 
 2. **Use the Decorator**:
-   Apply the `@remote_execution_decorator` to any function that requires remote execution. Example:
+   Apply the decorator to any function:
    ```python
-   from remote_execution import remote_execution_decorator
+   from client.remote_execution import remote_execution_decorator
    import pandas as pd
 
    @remote_execution_decorator
@@ -57,49 +84,44 @@ Using a decorator-based approach, it allows developers to write local Python fun
    result = process_big_excel(file_path="data.xlsx")
    print(result)
    ```
-   This will:
-   - Sync `data.xlsx` to the server (if new or modified).
-   - Execute the function remotely.
-   - Return the statistical summary and sync `result.xlsx` back to the client.
+   This syncs `data.xlsx` to the server, executes the function remotely, and returns the result and `result.xlsx`.
 
-3. **Test the System**:
-   Run the test script to verify functionality:
+3. **Run Tests**:
+   Validate the system locally:
    ```bash
-   python -m pytest test_server.py -v
+   python -m pytest test/test_server.py -v
    ```
-   Tests cover server connectivity, function execution, file synchronization, and environment comparison.
-
-## Project Structure
-- `remote_execution.py`: Client-side logic with the decorator for file sync and remote execution.
-- `server.py`: FastAPI server handling file uploads, execution, and downloads on port 7777.
-- `rem_shop.yaml`: Configuration file for server URL and endpoints.
-- `test_server.py`: Test script for local validation of the workflow.
-- `requirements.txt`: Dependencies for both client and server environments.
+   Tests verify connectivity, execution, file sync, and environment consistency.
 
 ## Developer Tasks
-- **Nginx Configuration**: Map HTTPS to `localhost:7777` in production with proper SSL/TLS settings.
-- **Environment Management**: Ensure identical Conda/virtual environments on client and server. Fix mismatches manually based on the environment comparison report.
-- **Server Deployment**: Deploy `server.py` on the remote host, ensuring port 7777 is accessible.
-- **Configuration**: Update `rem_shop.yaml` with the production server URL.
+- **Nginx Setup**: Configure SSL certificates and DNS for `xxx.com`. Ensure HTTPS requests to `/twin_baker` proxy to `localhost:7777`.
+- **Environment Sync**: Use `utils/merge_env_requirements.py` to align client and server environments. Fix mismatches manually based on test reports.
+- **Server Deployment**: Deploy `app/server.py` on the remote host, ensuring port 7777 is accessible.
+- **Configuration**: Update `config.yaml` with the production URL (`https://xxx.com/twin_baker`).
 
 ## Testing Locally
-1. Ensure the environment is set up with `requirements.txt`.
+1. Activate the environment:
+   ```bash
+   conda activate remote_twin_baker
+   ```
 2. Start the server:
    ```bash
-   python server.py
+   python app/server.py
    ```
 3. Run tests:
    ```bash
-   python -m pytest test_server.py -v
+   python -m pytest test/test_server.py -v
    ```
-4. Check the output for test results and environment mismatch reports (if any).
+4. Check for test results and environment mismatch reports.
 
 ## Use Cases
-- **Data Science/AI**: Offload large-scale data processing or model training to a remote GPU server.
-- **Collaborative Development**: Ensure environment consistency across teams for testing and deployment.
+- **Data Science/AI**: Offload large Excel processing or model training to remote GPUs.
+- **Team Collaboration**: Ensure environment consistency across development, testing, and ops.
 - **Edge Computing/IoT**: Enable resource-constrained devices to leverage remote compute power.
-- **Personal Projects**: Use local machines for development while executing heavy tasks on a cloud server.
+- **Personal Projects**: Develop locally while executing heavy tasks on cloud servers.
 
 ## Contributing
-Contributions are welcome! Please submit a pull request or open an issue for bugs, features, or improvements.
+Submit pull requests or open issues for bugs, features, or improvements. Follow the coding style in existing files.
 
+## License
+MIT License
