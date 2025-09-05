@@ -4,9 +4,9 @@ import pickle
 import subprocess
 import sys
 import tempfile
-from pathlib import Path
 from typing import Dict, List
 
+# Third Party Libraries
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.responses import Response
 
@@ -145,6 +145,7 @@ async def update_env(file: UploadFile = File(...)):
 
 
 if __name__ == "__main__":
+    # Third Party Libraries
     import uvicorn
 
     uvicorn.run(app, host="0.0.0.0", port=7777)

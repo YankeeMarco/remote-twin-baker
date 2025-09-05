@@ -1,0 +1,28 @@
+[tool.isort]
+profile = "black"  # Use 'black' profile for compatibility with Black code formatter
+line_length = 128  # Maximum line length for imports
+known_third_party = ["flask", "requests", "numpy", "pandas"]  # List of known third-party libraries
+known_first_party = ["src","config"]  # List of known first-party (local) modules
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]  # Import sections to order
+default_section = "THIRDPARTY"  # Default section for unknown imports
+skip = []  # Files or directories to skip
+combine_as_imports = true  # Combine multiple imports from the same module
+force_grid_wrap = 0  # Set to 0 for no wrapping
+include_trailing_comma = true  # Include a trailing comma for multi-line imports
+import_heading_stdlibrary = "Standard Library"  # Custom heading for standard library imports
+import_heading_thirdparty = "Third Party Libraries"  # Custom heading
+import_heading_firstparty = "Local Libraries"  # Custom heading for first-party imports
+multi_line_output = 3  # Output format for multi-line imports
+
+[tool.flake8]
+max-line-length = 128
+ignore = ["F401", "E501", "W503"]  # Adjust this list to ignore specific error codes
+exclude = ["*.egg", "*.egg-info", "__pycache__", "venv"]  # Exclude certain directories/files
+
+[tool.black]
+line-length = 128  # Set the line length for Black (optional)
+
+[tool.autoflake]
+remove_all_unused_imports = true  # This will remove all unused imports
+in_place = true                      # Edit files in place
+recursive = true 

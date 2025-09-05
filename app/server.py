@@ -2,9 +2,9 @@ import hashlib
 import os
 import pickle
 import sys
-from pathlib import Path
 from typing import Dict, List
 
+# Third Party Libraries
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.responses import Response
 
@@ -113,6 +113,7 @@ async def download_file(path: str):
 
 
 if __name__ == "__main__":
+    # Third Party Libraries
     import uvicorn
 
     uvicorn.run(app, host="0.0.0.0", port=7777)

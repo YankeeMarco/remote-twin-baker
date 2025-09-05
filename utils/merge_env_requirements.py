@@ -1,16 +1,11 @@
 import os
 import sys
 
+# Third Party Libraries
 import requests
-import yaml
 
-
-def load_config(config_path: str = "config.yaml") -> dict:
-    """Load the configuration from YAML file."""
-    if not os.path.exists(config_path):
-        config_path = "config.local.yaml"
-    with open(config_path, "r") as f:
-        return yaml.safe_load(f)
+# Local Libraries
+from utils.util import load_config, to_absolute_path
 
 
 def merge_requirements(
@@ -18,6 +13,10 @@ def merge_requirements(
 ) -> str:
     """Merge base and custom requirements into a single file."""
     requirements = set()
+
+    # Convert to absolute paths
+    base_path = to_absolute_path(base_path)
+    custom_path = to_absolute_path(custom_path)
 
     # Read base requirements
     if os.path.exists(base_path):
@@ -34,7 +33,7 @@ def merge_requirements(
             )
 
     # Write merged requirements
-    merged_path = "merged_requirements.txt"
+    merged_path = to_absolute_path("merged_requirements.txt")
     with open(merged_path, "w") as f:
         for req in sorted(requirements):
             f.write(f"{req}\n")
@@ -44,6 +43,7 @@ def merge_requirements(
 
 def sync_env_to_remote(merged_path: str):
     """Upload merged requirements to remote server and trigger update."""
+    merged_path = to_absolute_path(merged_path)
     config = load_config()
     server_url = config["server"]["url"]
     endpoint = config["server"]["endpoints"]["update_env"]

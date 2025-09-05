@@ -3,15 +3,11 @@ import subprocess
 import time
 from multiprocessing import Process
 
+# Third Party Libraries
 import pandas as pd
 import pytest
 import requests
-from remote_execution import (
-    compare_envs,
-    get_env_metadata,
-    load_config,
-    process_big_excel,
-)
+from remote_execution import compare_envs, get_env_metadata, process_big_excel
 
 # Configuration for local testing
 CONFIG_PATH = "rem_shop.yaml"
