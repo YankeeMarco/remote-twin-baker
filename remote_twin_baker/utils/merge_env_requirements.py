@@ -5,7 +5,8 @@ import sys
 import requests
 
 # Local Libraries
-from utils.util import load_config, to_absolute_path
+from remote_twin_baker.utils.paths import to_absolute_path
+from remote_twin_baker.utils.util import load_config
 
 
 def merge_requirements(
@@ -40,7 +41,6 @@ def merge_requirements(
 
     return merged_path
 
-
 def sync_env_to_remote(merged_path: str):
     """Upload merged requirements to remote server and trigger update."""
     merged_path = to_absolute_path(merged_path)
@@ -57,7 +57,6 @@ def sync_env_to_remote(merged_path: str):
     else:
         print(f"Environment sync failed: {response.text}")
         sys.exit(1)
-
 
 if __name__ == "__main__":
     merged_path = merge_requirements()

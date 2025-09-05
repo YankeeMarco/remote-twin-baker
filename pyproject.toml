@@ -1,28 +1,61 @@
+[project]
+name = "remote-twin-baker"
+version = "0.1.0"
+description = "A Python package for managing remote environment requirements"
+readme = "README.md"
+authors = [{name = "Your Name", email = "your.email@example.com"}]
+license = {file = "LICENSE"}
+requires-python = ">=3.8"
+dependencies = [
+    "requests>=2.28.0",
+    "pyyaml>=6.0",
+    "flask>=2.0",  # Add other dependencies from requirements.txt
+]
+
+[project.urls]
+Homepage = "https://github.com/YankeeMarco/remote-twin-baker"
+Repository = "https://github.com/YankeeMarco/remote-twin-baker.git"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["remote_twin_baker"]
+exclude = [
+    "/tests",
+    "/nginx",
+    "/requirements.txt",
+    "/custom_requirements.txt",
+    "/config.local.yaml",
+]
+
 [tool.isort]
-profile = "black"  # Use 'black' profile for compatibility with Black code formatter
-line_length = 128  # Maximum line length for imports
-known_third_party = ["flask", "requests", "numpy", "pandas"]  # List of known third-party libraries
-known_first_party = ["src","config"]  # List of known first-party (local) modules
-sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]  # Import sections to order
-default_section = "THIRDPARTY"  # Default section for unknown imports
-skip = []  # Files or directories to skip
-combine_as_imports = true  # Combine multiple imports from the same module
-force_grid_wrap = 0  # Set to 0 for no wrapping
-include_trailing_comma = true  # Include a trailing comma for multi-line imports
-import_heading_stdlibrary = "Standard Library"  # Custom heading for standard library imports
-import_heading_thirdparty = "Third Party Libraries"  # Custom heading
-import_heading_firstparty = "Local Libraries"  # Custom heading for first-party imports
-multi_line_output = 3  # Output format for multi-line imports
+profile = "black"
+line_length = 128
+known_third_party = ["flask", "requests", "numpy", "pandas", "pyyaml"]
+known_first_party = ["remote_twin_baker"]
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+default_section = "THIRDPARTY"
+skip = []
+combine_as_imports = true
+force_grid_wrap = 0
+include_trailing_comma = true
+import_heading_stdlibrary = "Standard Library"
+import_heading_thirdparty = "Third Party Libraries"
+import_heading_firstparty = "Local Libraries"
+multi_line_output = 3
 
 [tool.flake8]
 max-line-length = 128
-ignore = ["F401", "E501", "W503"]  # Adjust this list to ignore specific error codes
-exclude = ["*.egg", "*.egg-info", "__pycache__", "venv"]  # Exclude certain directories/files
+ignore = ["E501", "W503"]  # Remove F401 to allow unused import detection
+exclude = ["*.egg", "*.egg-info", "__pycache__", "venv"]
 
 [tool.black]
-line-length = 128  # Set the line length for Black (optional)
+line-length = 128
 
 [tool.autoflake]
-remove_all_unused_imports = true  # This will remove all unused imports
-in_place = true                      # Edit files in place
-recursive = true 
+remove_all_unused_imports = true
+in_place = true
+recursive = true
+exclude = ["tests/*", "nginx/*", "__init__.py"]
