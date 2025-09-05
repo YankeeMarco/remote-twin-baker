@@ -14,8 +14,10 @@ import requests
 import yaml
 
 
-# Load configuration from rem_shop.yaml
-def load_config(config_path: str = "rem_shop.yaml") -> Dict:
+# Load configuration from config.yaml or config.local.yaml
+def load_config(config_path: str = "config.yaml") -> Dict:
+    if not os.path.exists(config_path):
+        config_path = "config.local.yaml"
     with open(config_path, "r") as f:
         return yaml.safe_load(f)
 
@@ -195,7 +197,9 @@ def remote_execution_decorator(func: Callable) -> Callable:
         remote_env = response.json()
         env_match, env_report = compare_envs(local_env, remote_env)
         if not env_match:
-            print(f"Environment mismatch detected. Please fix manually:\n{env_report}")
+            print(
+                f"Environment mismatch detected. Please run 'python utils/merge_env_requirements.py' to sync or fix manually:\n{env_report}"
+            )
 
         return result
 

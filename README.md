@@ -6,6 +6,7 @@
 - **Decorator-Based Execution**: Use `@remote_execution_decorator` to run local Python functions on a remote server.
 - **Efficient File Sync**: Transfers only new or modified files using MD5 hash checks.
 - **Environment Validation**: Compares client and server environments, reporting mismatches for manual correction.
+- **Environment Sync**: Use `utils/merge_env_requirements.py` to merge base and custom requirements and update the remote server.
 - **Result Retrieval**: Returns Python objects and new files, with 10-second polling for asynchronous file sync.
 - **Scalable Deployment**: Runs a FastAPI server on port 7777, with Nginx for HTTPS in production.
 - **Versatile Use Cases**: Supports large-scale data processing, AI model training, IoT, and team collaboration.
@@ -23,11 +24,11 @@ remote-twin-baker/
 ├── config.yaml                # Production configuration
 ├── nginx/
 │   └── remote_twin_baker.conf # Nginx configuration for HTTPS
-├── requirements.txt           # Dependencies for client and server
+├── requirements.txt           # Base dependencies for client and server
 ├── test/
 │   └── test_server.py         # Test script for local validation
 └── utils/
-    └── merge_env_requirements.py # Utility for environment management
+    └── merge_env_requirements.py # Utility for merging and syncing environments
 ```
 
 ## Installation
@@ -86,7 +87,17 @@ remote-twin-baker/
    ```
    This syncs `data.xlsx` to the server, executes the function remotely, and returns the result and `result.xlsx`.
 
-3. **Run Tests**:
+3. **Sync Environments**:
+   If an environment mismatch is detected (e.g., during execution or tests), run:
+   ```bash
+   python utils/merge_env_requirements.py
+   ```
+   - This merges `requirements.txt` with `custom_requirements.txt` (if exists).
+   - Uploads the merged file to the server.
+   - Triggers `pip install` on the remote server to align environments.
+   - Note: Create `custom_requirements.txt` in the root directory for additional packages.
+
+4. **Run Tests**:
    Validate the system locally:
    ```bash
    python -m pytest test/test_server.py -v
@@ -95,7 +106,7 @@ remote-twin-baker/
 
 ## Developer Tasks
 - **Nginx Setup**: Configure SSL certificates and DNS for `xxx.com`. Ensure HTTPS requests to `/twin_baker` proxy to `localhost:7777`.
-- **Environment Sync**: Use `utils/merge_env_requirements.py` to align client and server environments. Fix mismatches manually based on test reports.
+- **Environment Sync**: Run `utils/merge_env_requirements.py` to align client and server environments. Fix any remaining mismatches manually based on test reports.
 - **Server Deployment**: Deploy `app/server.py` on the remote host, ensuring port 7777 is accessible.
 - **Configuration**: Update `config.yaml` with the production URL (`https://xxx.com/twin_baker`).
 
@@ -122,3 +133,6 @@ remote-twin-baker/
 
 ## Contributing
 Submit pull requests or open issues for bugs, features, or improvements. Follow the coding style in existing files.
+
+## License
+MIT License

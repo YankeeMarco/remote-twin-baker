@@ -1,5 +1,5 @@
 server:
-  url: https://your-server.com
+  url: https://xxx.com/twin_baker
   endpoints:
     check_files: /check_files
     upload_file: /upload_file
@@ -7,3 +7,4 @@ server:
     check_new_files: /check_new_files
     download_file: /download_file
     get_env: /get_env
+    update_env: /update_env

@@ -7,3 +7,4 @@ server:
     check_new_files: /check_new_files
     download_file: /download_file
     get_env: /get_env
+    update_env: /update_env
