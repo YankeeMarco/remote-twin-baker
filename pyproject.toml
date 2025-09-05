@@ -1,7 +1,7 @@
 [project]
 name = "remote-twin-baker"
-version = "0.1.0"
-description = "A Python package for managing remote environment requirements"
+version = "0.2.0"  # Updated from 0.1.0
+description = "A Python package for seamless remote task executions."
 readme = "README.md"
 authors = [{name = "Your Name", email = "your.email@example.com"}]
 license = {file = "LICENSE"}
@@ -14,7 +14,9 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/YankeeMarco/remote-twin-baker"
-Repository = "https://github.com/YankeeMarco/remote-twin-baker.git"
+Documentation = "https://github.com/YankeeMarco/remote-twin-baker#readme"
+Repository = "https://github.com/YankeeMarco/remote-twin-baker"
+Issues = "https://github.com/YankeeMarco/remote-twin-baker/issues"
 
 [build-system]
 requires = ["hatchling"]
