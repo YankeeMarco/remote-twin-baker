@@ -56,7 +56,7 @@ pip install remote-twin-baker
 ### Option 2: Install from Source (Development)
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-username/remote-twin-baker.git
+   git clone https://github.com/YankeeMarco/remote-twin-baker.git
    cd remote-twin-baker
    ```
 
@@ -161,7 +161,7 @@ pip install remote-twin-baker
 See [CHANGELOG.md](CHANGELOG.md) for version history and release notes.
 
 ## Contributing
-Submit pull requests or open issues at [https://github.com/your-username/remote-twin-baker](https://github.com/your-username/remote-twin-baker). Follow the coding style in existing files.
+Submit pull requests or open issues at [https://github.com/YankeeMarco/remote-twin-baker](https://github.com/YankeeMarco/remote-twin-baker). Follow the coding style in existing files.
 
 ## License
 MIT License
